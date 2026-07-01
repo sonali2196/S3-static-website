@@ -1,0 +1,28 @@
+name: Deploy Static Website to Amazon S3
+ 
+on:
+  push:
+    branches:
+      - main # Triggers the workflow whenever code pushes to main
+ 
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+ 
+    steps:
+      # 1. Pull the codebase into the runner environment
+      - name: Checkout Source Code
+        uses: actions/checkout@v4
+ 
+      # 2. Authenticate securely with AWS using GitHub Secrets
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-south-1 # Change to your targeted bucket region
+ 
+      # 3. Synchronize files and purge deleted repository files from the bucket
+      - name: Sync Files to S3 Bucket
+        run: |
+          aws s3 sync ./dist s3://s3-static-web-hosting01 --delete
