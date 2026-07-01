@@ -21,5 +21,4 @@ jobs:
           aws-region: ap-south-1
  
       - name: Sync Files to S3 Bucket
-        run: |
-          aws s3 sync . s3://s3-static-web-hosting01 --delete
+        run: aws s3 sync ./space-static-website s3://s3-static-web-hosting01 --delete
